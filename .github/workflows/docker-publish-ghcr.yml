@@ -60,8 +60,8 @@ jobs:
           tags: |
             ghcr.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:${{ env.TAG_DEV1 }}
           #   ghcr.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:${{ env.TAG_DEV1 }}-${{ env.SHORT_SHA }}
-          # cache-from: type=registry,ref=ghcr.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:cache-ubuntu22
-          # cache-to: type=registry,ref=ghcr.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:cache-ubuntu22,mode=max
+          cache-from: type=registry,ref=ghcr.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:cache-ubuntu22
+          cache-to: type=registry,ref=ghcr.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:cache-ubuntu22,mode=max
 
       - name: Build and push (ubuntu25 -> dev2)
         uses: docker/build-push-action@v4
@@ -73,8 +73,8 @@ jobs:
           tags: |
             ghcr.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:${{ env.TAG_DEV2 }}
           #   ghcr.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:${{ env.TAG_DEV2 }}-${{ env.SHORT_SHA }}
-          # cache-from: type=registry,ref=ghcr.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:cache-ubuntu25
-          # cache-to: type=registry,ref=ghcr.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:cache-ubuntu25,mode=max
+          cache-from: type=registry,ref=ghcr.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:cache-ubuntu25
+          cache-to: type=registry,ref=ghcr.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:cache-ubuntu25,mode=max
 
       - name: Post-check (log pushed tags)
         run: |
