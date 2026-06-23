@@ -79,12 +79,12 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: |
             docker.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:${{ env.TAG_DEV1 }}
-            docker.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:${{ env.TAG_DEV1 }}-${{ env.SHORT_SHA }}
+            # docker.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:${{ env.TAG_DEV1 }}-${{ env.SHORT_SHA }}
           # build-args: 注意这里是复数 "build-args"，每行 KEY=VALUE
           build-args: |
             CACHEBUST=${{ env.CACHEBUST }}
-          cache-from: type=registry,ref=docker.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:cache-ubuntu22
-          cache-to: type=registry,ref=docker.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:cache-ubuntu22,mode=max
+          # cache-from: type=registry,ref=docker.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:cache-ubuntu22
+          # cache-to: type=registry,ref=docker.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:cache-ubuntu22,mode=max
 
       - name: Build and push (ubuntu25 -> dev2)
         id: build_ubuntu25
@@ -97,16 +97,16 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: |
             docker.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:${{ env.TAG_DEV2 }}
-            docker.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:${{ env.TAG_DEV2 }}-${{ env.SHORT_SHA }}
+            # docker.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:${{ env.TAG_DEV2 }}-${{ env.SHORT_SHA }}
           build-args: |
             CACHEBUST=${{ env.CACHEBUST }}
-          cache-from: type=registry,ref=docker.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:cache-ubuntu25
-          cache-to: type=registry,ref=docker.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:cache-ubuntu25,mode=max
+          # cache-from: type=registry,ref=docker.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:cache-ubuntu25
+          # cache-to: type=registry,ref=docker.io/${{ env.OWNER_LOWER }}/${{ env.IMAGE_NAME }}:cache-ubuntu25,mode=max
 
       - name: Post-check (pushed tags)
         run: |
           echo "Pushed tags:"
           echo "  docker.io/${OWNER_LOWER}/${IMAGE_NAME}:${TAG_DEV1}"
-          echo "  docker.io/${OWNER_LOWER}/${IMAGE_NAME}:${TAG_DEV1}-${SHORT_SHA}"
+          # echo "  docker.io/${OWNER_LOWER}/${IMAGE_NAME}:${TAG_DEV1}-${SHORT_SHA}"
           echo "  docker.io/${OWNER_LOWER}/${IMAGE_NAME}:${TAG_DEV2}"
-          echo "  docker.io/${OWNER_LOWER}/${IMAGE_NAME}:${TAG_DEV2}-${SHORT_SHA}"
+          # echo "  docker.io/${OWNER_LOWER}/${IMAGE_NAME}:${TAG_DEV2}-${SHORT_SHA}"
