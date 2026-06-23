@@ -31,15 +31,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare metadata (owner lowercase, short sha, cachebust)
+      - name: Prepare metadata (owner sanitize, short sha, cachebust)
         run: |
+          # Pick owner: prefer DOCKERHUB_USERNAME secret (if set), otherwise repo owner
           if [ -n "${{ secrets.DOCKERHUB_USERNAME }}" ]; then
             OWNER="${{ secrets.DOCKERHUB_USERNAME }}"
           else
             OWNER="${{ github.repository_owner }}"
           fi
-          echo "OWNER_LOWER=$(echo \"$OWNER\" | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+          # Sanitize owner: remove single/double quotes and whitespace, then lowercase
+          OWNER="${OWNER//\"/}"
+          OWNER="${OWNER//\'/}"
+          # remove whitespace (space, tab, newline)
+          OWNER="$(echo "$OWNER" | tr -d '[:space:]')"
+          OWNER_LOWER="$(echo "$OWNER" | tr '[:upper:]' '[:lower:]')"
+
+          if [ -z "$OWNER_LOWER" ]; then
+            echo "ERROR: OWNER_LOWER is empty after sanitization" >&2
+            exit 1
+          fi
+
+          echo "OWNER_LOWER=$OWNER_LOWER" >> $GITHUB_ENV
           echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
           if [ "${{ github.event.inputs.force_cache_bust || 'false' }}" = "true" ]; then
             echo "CACHEBUST=${GITHUB_RUN_ID}" >> $GITHUB_ENV
           else
@@ -53,7 +68,7 @@ jobs:
         uses: docker/setup-buildx-action@v4
         with:
           driver: docker-container
-          # 可选：若频繁遇到 "Unable to reserve cache" 错误，可设置为 false
+          # 可选：若频繁看到 "Unable to reserve cache" 错误，可将 cache-binary 设为 false
           cache-binary: false
 
       - name: Log in to Docker Hub
